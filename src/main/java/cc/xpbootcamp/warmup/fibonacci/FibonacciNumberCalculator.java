@@ -6,6 +6,9 @@ public class FibonacciNumberCalculator {
         if (step < 0) {
             throw new IllegalArgumentException();
         }
+        if(step == 0){
+            return 0;
+        }
         return 1;
     }
 }
