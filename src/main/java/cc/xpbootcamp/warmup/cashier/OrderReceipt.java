@@ -23,25 +23,33 @@ public class OrderReceipt {
         StringBuilder output = new StringBuilder();
 
         // print headers
-        output.append(PRINTING_TITLE).append(NEWLINE);
+        printHeader(output);
+        printItems(output);
+        double totalSalesTax = printSalesTax(output);
+        printTotalAmount(output, totalSalesTax);
 
-        // print date, bill no, customer name
-//        output.append("Date - " + order.getDate();
+        return output.toString();
+    }
+
+    private void printTotalAmount(StringBuilder output, double totalSalesTax) {
+        double totalAmountIncludeTax = order.getLineItems().stream().mapToDouble(LineItem::totalAmount).sum() + totalSalesTax;
+        output.append(TOTAL_AMOUNT_TITLE).append(TAB).append(totalAmountIncludeTax);
+    }
+
+    private double printSalesTax(StringBuilder output) {
+        double totalSalesTax = order.getLineItems().stream().mapToDouble(LineItem::getSalesTax).sum();
+        output.append(SALES_TAX_TITLE).append(TAB).append(totalSalesTax);
+        return totalSalesTax;
+    }
+
+    private void printItems(StringBuilder output) {
+        order.getLineItems().stream().map(LineItem::printOrderItemRow).forEach(output::append);
+    }
+
+    private void printHeader(StringBuilder output) {
+        output.append(PRINTING_TITLE).append(NEWLINE);
         output.append(order.getCustomerName());
         output.append(order.getCustomerAddress());
-//        output.append(order.getCustomerLoyaltyNumber());
-
-        // prints lineItems
-        order.getLineItems().stream().map(LineItem::printOrderItemRow).forEach(output::append);
-        double totalSalesTax = order.getLineItems().stream().mapToDouble(LineItem::getSalesTax).sum();
-        double totalAmountIncludeTax = order.getLineItems().stream().mapToDouble(LineItem::totalAmount).sum() + totalSalesTax;
-
-        // prints the state tax
-        output.append(SALES_TAX_TITLE).append(TAB).append(totalSalesTax);
-
-        // print total amount
-        output.append(TOTAL_AMOUNT_TITLE).append(TAB).append(totalAmountIncludeTax);
-        return output.toString();
     }
 
 }
