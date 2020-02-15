@@ -38,4 +38,9 @@ class FibonacciNumberCalculatorTest {
     void should_throw_IAE_given_step_is_negative() {
         assertThrows(IllegalArgumentException.class, () -> calculator.calculate(-1));
     }
+
+    @Test
+    void should_throw_IAE_given_step_greater_than_50() {
+        assertThrows(IllegalArgumentException.class, () -> calculator.calculate(51));
+    }
 }

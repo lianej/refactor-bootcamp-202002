@@ -6,10 +6,10 @@ public class FibonacciNumberCalculator {
 
     private long[] resultCache;
 
-    int maxLength = 51;
+    int maxStep = 50;
 
     public FibonacciNumberCalculator() {
-        this.resultCache = new long[maxLength];
+        this.resultCache = new long[maxStep + 1];
         Arrays.fill(resultCache, 1, this.resultCache.length, -1);
         initCalculateResultCache();
     }
@@ -17,13 +17,16 @@ public class FibonacciNumberCalculator {
     private void initCalculateResultCache() {
         this.resultCache[0] = 0;
         this.resultCache[1] = 1;
-        for (int i = 0; i < maxLength; i++) {
+        for (int i = 0; i <= maxStep; i++) {
             getResultFromCache(i);
         }
     }
 
     public long calculate(int step) {
         if (step < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (step > maxStep) {
             throw new IllegalArgumentException();
         }
         return getResultFromCache(step);
