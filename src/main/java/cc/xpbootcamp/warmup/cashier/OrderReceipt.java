@@ -8,6 +8,11 @@ package cc.xpbootcamp.warmup.cashier;
  *
  */
 public class OrderReceipt {
+    public static final String NEWLINE = "\n";
+    public static final String TAB = "\t";
+    public static final String PRINTING_TITLE = "======Printing Orders======";
+    public static final String SALES_TAX_TITLE = "Sales Tax";
+    public static final String TOTAL_AMOUNT_TITLE = "Total Amount";
     private Order order;
 
     public OrderReceipt(Order order) {
@@ -18,7 +23,7 @@ public class OrderReceipt {
         StringBuilder output = new StringBuilder();
 
         // print headers
-        output.append("======Printing Orders======\n");
+        output.append(PRINTING_TITLE).append(NEWLINE);
 
         // print date, bill no, customer name
 //        output.append("Date - " + order.getDate();
@@ -31,13 +36,13 @@ public class OrderReceipt {
         double totalAmountIncludeTax = 0d;
         for (LineItem lineItem : order.getLineItems()) {
             output.append(lineItem.getDescription());
-            output.append('\t');
+            output.append(TAB);
             output.append(lineItem.getPrice());
-            output.append('\t');
+            output.append(TAB);
             output.append(lineItem.getQuantity());
-            output.append('\t');
+            output.append(TAB);
             output.append(lineItem.totalAmount());
-            output.append('\n');
+            output.append(NEWLINE);
 
             // calculate sales tax @ rate of 10%
             double salesTax = lineItem.totalAmount() * .10;
@@ -48,10 +53,10 @@ public class OrderReceipt {
         }
 
         // prints the state tax
-        output.append("Sales Tax").append('\t').append(totalSalesTax);
+        output.append(SALES_TAX_TITLE).append(TAB).append(totalSalesTax);
 
         // print total amount
-        output.append("Total Amount").append('\t').append(totalAmountIncludeTax);
+        output.append(TOTAL_AMOUNT_TITLE).append(TAB).append(totalAmountIncludeTax);
         return output.toString();
     }
 }
