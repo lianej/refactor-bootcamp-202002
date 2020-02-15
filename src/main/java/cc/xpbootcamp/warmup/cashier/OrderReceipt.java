@@ -24,21 +24,18 @@ public class OrderReceipt {
 
         printHeader(output);
         printItems(output);
-        double totalSalesTax = printSalesTax(output);
-        printTotalAmount(output, totalSalesTax);
+        printSalesTax(output);
+        printTotalAmount(output);
 
         return output.toString();
     }
 
-    private void printTotalAmount(StringBuilder output, double totalSalesTax) {
-        double totalAmountIncludeTax = order.getLineItems().stream().mapToDouble(LineItem::totalAmount).sum() + totalSalesTax;
-        output.append(TOTAL_AMOUNT_TITLE).append(TAB).append(totalAmountIncludeTax);
+    private void printTotalAmount(StringBuilder output) {
+        output.append(TOTAL_AMOUNT_TITLE).append(TAB).append(order.getTotalAmountIncludeTax());
     }
 
-    private double printSalesTax(StringBuilder output) {
-        double totalSalesTax = order.getLineItems().stream().mapToDouble(LineItem::getSalesTax).sum();
-        output.append(SALES_TAX_TITLE).append(TAB).append(totalSalesTax);
-        return totalSalesTax;
+    private void printSalesTax(StringBuilder output) {
+        output.append(SALES_TAX_TITLE).append(TAB).append(order.getTotalSalesTax());
     }
 
     private void printItems(StringBuilder output) {
