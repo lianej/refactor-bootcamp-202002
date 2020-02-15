@@ -23,7 +23,7 @@ public class OrderReceipt {
         StringBuilder output = new StringBuilder();
 
         printHeader(output);
-        printItems(output);
+        printItemRows(output);
         printSalesTax(output);
         printTotalAmount(output);
 
@@ -38,14 +38,22 @@ public class OrderReceipt {
         output.append(SALES_TAX_TITLE).append(TAB).append(order.getTotalSalesTax());
     }
 
-    private void printItems(StringBuilder output) {
-        order.getLineItems().stream().map(LineItem::printOrderItemRow).forEach(output::append);
+    private void printItemRows(StringBuilder output) {
+        order.getLineItems().stream().map(this::printItemRow).forEach(output::append);
+    }
+
+    private String printItemRow(LineItem lineItem) {
+        return lineItem.getDescription() + TAB +
+                lineItem.getPrice() + TAB +
+                lineItem.getQuantity() + TAB +
+                lineItem.totalAmount() + NEWLINE;
     }
 
     private void printHeader(StringBuilder output) {
         output.append(PRINTING_TITLE).append(NEWLINE);
         output.append(order.getCustomerName());
         output.append(order.getCustomerAddress());
+        output.append(NEWLINE);
     }
 
 }

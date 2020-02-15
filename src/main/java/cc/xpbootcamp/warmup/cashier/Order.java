@@ -29,7 +29,7 @@ public class Order {
         return getLineItems().stream().mapToDouble(LineItem::totalAmount).sum() + getTotalSalesTax();
     }
 
-    double getTotalSalesTax() {
+    public double getTotalSalesTax() {
         return getLineItems().stream().mapToDouble(LineItem::getSalesTax).sum();
     }
 }

@@ -28,13 +28,6 @@ public class LineItem {
         return price * quantity;
     }
 
-    public String printOrderItemRow() {
-        return getDescription() + OrderReceipt.TAB +
-                getPrice() + OrderReceipt.TAB +
-                getQuantity() + OrderReceipt.TAB +
-                totalAmount() + OrderReceipt.NEWLINE;
-    }
-
 	double getSalesTax() {
 		return totalAmount() * .10;
 	}
