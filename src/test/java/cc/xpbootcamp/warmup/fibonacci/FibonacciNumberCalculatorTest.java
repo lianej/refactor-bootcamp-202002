@@ -20,7 +20,12 @@ class FibonacciNumberCalculatorTest {
     }
 
     @Test
+    void should_return_1_given_step_is_2() {
+        assertEquals(1, calculator.calculate(2));
+    }
+
+    @Test
     void should_throw_IAE_given_step_is_negative() {
-        assertThrows(IllegalArgumentException.class, ()->calculator.calculate(-1));
+        assertThrows(IllegalArgumentException.class, () -> calculator.calculate(-1));
     }
 }
