@@ -34,4 +34,8 @@ public class LineItem {
                 getQuantity() + OrderReceipt.TAB +
                 totalAmount() + OrderReceipt.NEWLINE;
     }
+
+	double getSalesTax() {
+		return totalAmount() * .10;
+	}
 }
