@@ -1,11 +1,12 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.util.stream.Collectors;
+
 /**
  * OrderReceipt prints the details of order including customer name, address, description, quantity,
  * price and amount. It also calculates the sales tax @ 10% and prints as part
  * of order. It computes the total order amount (amount of individual lineItems +
  * total sales tax) and prints it.
- *
  */
 public class OrderReceipt {
     public static final String NEWLINE = "\n";
@@ -20,40 +21,34 @@ public class OrderReceipt {
     }
 
     public String printReceipt() {
-        StringBuilder output = new StringBuilder();
-
-        printHeader(output);
-        printItemRows(output);
-        printSalesTax(output);
-        printTotalAmount(output);
-
-        return output.toString();
+        return getHeaderPrinting() + getItemRowsPrinting() + getSalesTaxPrinting() + getTotalAmountPrinting();
     }
 
-    private void printTotalAmount(StringBuilder output) {
-        output.append(TOTAL_AMOUNT_TITLE).append(TAB).append(order.getTotalAmountIncludeTax());
+    private String getTotalAmountPrinting() {
+        return StringUtils.joining(TAB, TOTAL_AMOUNT_TITLE, order.getTotalAmountIncludeTax());
     }
 
-    private void printSalesTax(StringBuilder output) {
-        output.append(SALES_TAX_TITLE).append(TAB).append(order.getTotalSalesTax());
+    private String getSalesTaxPrinting() {
+        return StringUtils.joining(TAB, SALES_TAX_TITLE, order.getTotalSalesTax());
     }
 
-    private void printItemRows(StringBuilder output) {
-        order.getLineItems().stream().map(this::printItemRow).forEach(output::append);
+    private String getItemRowsPrinting() {
+        return order.getLineItems().stream().map(this::printItemRow).collect(Collectors.joining());
     }
 
     private String printItemRow(LineItem lineItem) {
-        return lineItem.getDescription() + TAB +
-                lineItem.getPrice() + TAB +
-                lineItem.getQuantity() + TAB +
-                lineItem.totalAmount() + NEWLINE;
+        String row = StringUtils.joining(TAB,
+                lineItem.getDescription(),
+                lineItem.getPrice(),
+                lineItem.getQuantity(),
+                lineItem.totalAmount());
+        return row + NEWLINE;
     }
 
-    private void printHeader(StringBuilder output) {
-        output.append(PRINTING_TITLE).append(NEWLINE);
-        output.append(order.getCustomerName());
-        output.append(order.getCustomerAddress());
-        output.append(NEWLINE);
+    private String getHeaderPrinting() {
+        return PRINTING_TITLE + NEWLINE +
+                order.getCustomerName() +
+                order.getCustomerAddress() +
+                NEWLINE;
     }
-
 }
