@@ -22,7 +22,6 @@ public class OrderReceipt {
     public String printReceipt() {
         StringBuilder output = new StringBuilder();
 
-        // print headers
         printHeader(output);
         printItems(output);
         double totalSalesTax = printSalesTax(output);
