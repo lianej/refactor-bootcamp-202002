@@ -1,15 +1,22 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
-    String customerName;
-    String address;
-    List<LineItem> lineItems;
+    private String customerName;
+    private String address;
+    private List<LineItem> lineItems;
+    private LocalDate createDate;
 
     public Order(String customerName, String address, List<LineItem> lineItems) {
         this.customerName = customerName;
         this.address = address;
+        this.lineItems = lineItems;
+    }
+
+    public Order(LocalDate createDate, List<LineItem> lineItems) {
+        this.createDate = createDate;
         this.lineItems = lineItems;
     }
 
@@ -26,10 +33,14 @@ public class Order {
     }
 
     public double getTotalAmountIncludeTax() {
-        return getLineItems().stream().mapToDouble(LineItem::totalAmount).sum() + getTotalSalesTax();
+        return getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum() + getTotalSalesTax();
     }
 
     public double getTotalSalesTax() {
         return getLineItems().stream().mapToDouble(LineItem::getSalesTax).sum();
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
     }
 }

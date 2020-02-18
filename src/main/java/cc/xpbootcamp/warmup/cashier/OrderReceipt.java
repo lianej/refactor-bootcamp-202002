@@ -1,13 +1,18 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class OrderReceipt {
     private static final String NEWLINE = "\n";
     private static final String TAB = "\t";
-    private static final String PRINTING_TITLE = "======Printing Orders======";
-    private static final String SALES_TAX_TITLE = "Sales Tax";
-    private static final String TOTAL_AMOUNT_TITLE = "Total Amount";
+    private static final String PRINTING_TITLE = "===== 老王超市，值得信赖 ======";
+    private static final String SALES_TAX_TITLE = "税额";
+    private static final String TOTAL_AMOUNT_TITLE = "总价";
+    public static final String SEPARATION_LINE = "-----------------------------------";
+    private DecimalFormat priceFormatter = new DecimalFormat("#.00");
     private Order order;
 
     public OrderReceipt(Order order) {
@@ -19,30 +24,31 @@ public class OrderReceipt {
     }
 
     private String getTotalAmountPrinting() {
-        return StringUtils.joining(TAB, TOTAL_AMOUNT_TITLE, order.getTotalAmountIncludeTax());
+        return TOTAL_AMOUNT_TITLE + ":   " + priceFormatter.format(order.getTotalAmountIncludeTax()) + NEWLINE;
     }
 
     private String getSalesTaxPrinting() {
-        return StringUtils.joining(TAB, SALES_TAX_TITLE, order.getTotalSalesTax());
+        return SALES_TAX_TITLE + ":   " + priceFormatter.format(order.getTotalSalesTax()) + NEWLINE;
     }
 
     private String getItemRowsPrinting() {
-        return order.getLineItems().stream().map(this::printItemRow).collect(Collectors.joining());
+        return order.getLineItems().stream().map(this::printItemRow).collect(Collectors.joining()) +
+                SEPARATION_LINE + NEWLINE;
     }
 
     private String printItemRow(LineItem lineItem) {
-        String row = StringUtils.joining(TAB,
-                lineItem.getDescription(),
-                lineItem.getPrice(),
-                lineItem.getQuantity(),
-                lineItem.totalAmount());
+        String delimiter = ", ";
+        String multiplicationSign = " x ";
+        String row =
+                lineItem.getDescription() + delimiter +
+                        priceFormatter.format(lineItem.getPrice()) + multiplicationSign + lineItem.getQuantity() + delimiter +
+                        priceFormatter.format(lineItem.getTotalAmount());
         return row + NEWLINE;
     }
 
     private String getHeaderPrinting() {
-        return PRINTING_TITLE + NEWLINE +
-                order.getCustomerName() +
-                order.getCustomerAddress() +
-                NEWLINE;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA);
+        return PRINTING_TITLE + NEWLINE + NEWLINE +
+                dateTimeFormatter.format(order.getCreateDate()) + NEWLINE + NEWLINE;
     }
 }
