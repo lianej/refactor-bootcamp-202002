@@ -11,9 +11,10 @@ public class OrderReceipt {
     private static final String SALES_TAX_TITLE = "税额:   ";
     private static final String DISCOUNT_TITLE = "折扣:   ";
     private static final String TOTAL_AMOUNT_TITLE = "总价:   ";
-    public static final String SEPARATION_LINE = "-----------------------------------";
-    private DecimalFormat priceFormatter = new DecimalFormat("#.00");
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA);
+    private static final String SEPARATION_LINE = "-----------------------------------";
+    private static final DecimalFormat priceFormatter = new DecimalFormat("#.00");
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA);
+
     private Order order;
 
     public OrderReceipt(Order order) {
@@ -33,7 +34,7 @@ public class OrderReceipt {
     }
 
     private String getDiscountAmountPrinting() {
-        if (order.isDiscountDay()) {
+        if (order.getTotalDiscountAmount() > 0) {
             return DISCOUNT_TITLE + priceFormatter.format(order.getTotalDiscountAmount()) + NEWLINE;
         } else {
             return "";
@@ -50,13 +51,12 @@ public class OrderReceipt {
     }
 
     private String printItemRow(LineItem lineItem) {
-        String delimiter = ", ";
-        String multiplicationSign = " x ";
-        String row =
-                lineItem.getDescription() + delimiter +
-                        priceFormatter.format(lineItem.getPrice()) + multiplicationSign + lineItem.getQuantity() + delimiter +
-                        priceFormatter.format(lineItem.getTotalAmount());
-        return row + NEWLINE;
+        String template = "{desc}, {price} x {quantity}, {totalAmount}" + NEWLINE;
+        return template
+                .replace("{desc}", lineItem.getDescription())
+                .replace("{price}", priceFormatter.format(lineItem.getPrice()))
+                .replace("{quantity}", String.valueOf(lineItem.getQuantity()))
+                .replace("{totalAmount}", priceFormatter.format(lineItem.getTotalAmount()));
     }
 
     private String getHeaderPrinting() {

@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
-    private static final double DISCOUNT_RATE = 0.02;
-    private static final int NO_DISCOUNT = 0;
+    private static final double DISCOUNT_RATE = 0.02d;
+    private static final double NO_DISCOUNT = 0d;
     private List<LineItem> lineItems;
     private LocalDate createDate;
 
@@ -24,8 +24,13 @@ public class Order {
     }
 
     public double getTotalAmountIncludeTax() {
-        return getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum() + getTotalSalesTax() - getTotalDiscountAmount();
+        return getTotalAmount() + getTotalSalesTax() - getTotalDiscountAmount();
     }
+
+    public double getTotalAmount() {
+        return getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum();
+    }
+
     public double getTotalDiscountAmount() {
         return getLineItems().stream().mapToDouble(LineItem::getDiscount).sum();
     }
