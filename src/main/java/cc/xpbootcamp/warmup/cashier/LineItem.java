@@ -5,12 +5,21 @@ public class LineItem {
     private String description;
     private double price;
     private int quantity;
+    private double discountRate;
 
     public LineItem(String description, double price, int quantity) {
         super();
         this.description = description;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    void setDiscountRate(double discountRate) {
+        this.discountRate = discountRate;
+    }
+
+    public double getDiscount(){
+        return (this.getTotalAmount() + this.getSalesTax()) * discountRate;
     }
 
     public String getDescription() {
@@ -26,10 +35,11 @@ public class LineItem {
     }
 
     public double getTotalAmount() {
-        return price * quantity;
+        return getPrice() * getQuantity();
     }
 
     double getSalesTax() {
         return getTotalAmount() * TAX_RATE;
     }
+
 }

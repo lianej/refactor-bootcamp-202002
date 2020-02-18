@@ -7,12 +7,13 @@ import java.util.stream.Collectors;
 
 public class OrderReceipt {
     private static final String NEWLINE = "\n";
-    private static final String TAB = "\t";
     private static final String PRINTING_TITLE = "===== 老王超市，值得信赖 ======";
-    private static final String SALES_TAX_TITLE = "税额";
-    private static final String TOTAL_AMOUNT_TITLE = "总价";
+    private static final String SALES_TAX_TITLE = "税额:   ";
+    private static final String DISCOUNT_TITLE = "折扣:   ";
+    private static final String TOTAL_AMOUNT_TITLE = "总价:   ";
     public static final String SEPARATION_LINE = "-----------------------------------";
     private DecimalFormat priceFormatter = new DecimalFormat("#.00");
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA);
     private Order order;
 
     public OrderReceipt(Order order) {
@@ -20,15 +21,27 @@ public class OrderReceipt {
     }
 
     public String printReceipt() {
-        return getHeaderPrinting() + getItemRowsPrinting() + getSalesTaxPrinting() + getTotalAmountPrinting();
+        return getHeaderPrinting() + getItemRowsPrinting() + getAmountPrinting();
+    }
+
+    private String getAmountPrinting() {
+        return getSalesTaxPrinting() + getDiscountAmountPrinting() + getTotalAmountPrinting();
     }
 
     private String getTotalAmountPrinting() {
-        return TOTAL_AMOUNT_TITLE + ":   " + priceFormatter.format(order.getTotalAmountIncludeTax()) + NEWLINE;
+        return TOTAL_AMOUNT_TITLE + priceFormatter.format(order.getTotalAmountIncludeTax()) + NEWLINE;
+    }
+
+    private String getDiscountAmountPrinting() {
+        if (order.isDiscountDay()) {
+            return DISCOUNT_TITLE + priceFormatter.format(order.getTotalDiscountAmount()) + NEWLINE;
+        } else {
+            return "";
+        }
     }
 
     private String getSalesTaxPrinting() {
-        return SALES_TAX_TITLE + ":   " + priceFormatter.format(order.getTotalSalesTax()) + NEWLINE;
+        return SALES_TAX_TITLE + priceFormatter.format(order.getTotalSalesTax()) + NEWLINE;
     }
 
     private String getItemRowsPrinting() {
@@ -47,7 +60,6 @@ public class OrderReceipt {
     }
 
     private String getHeaderPrinting() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA);
         return PRINTING_TITLE + NEWLINE + NEWLINE +
                 dateTimeFormatter.format(order.getCreateDate()) + NEWLINE + NEWLINE;
     }

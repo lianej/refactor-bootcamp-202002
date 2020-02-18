@@ -4,28 +4,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
-    private String customerName;
-    private String address;
+    private static final double DISCOUNT_RATE = 0.02;
+    private static final int NO_DISCOUNT = 0;
     private List<LineItem> lineItems;
     private LocalDate createDate;
-
-    public Order(String customerName, String address, List<LineItem> lineItems) {
-        this.customerName = customerName;
-        this.address = address;
-        this.lineItems = lineItems;
-    }
 
     public Order(LocalDate createDate, List<LineItem> lineItems) {
         this.createDate = createDate;
         this.lineItems = lineItems;
+        this.lineItems.forEach(item->item.setDiscountRate(getDiscountRate()));
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public String getCustomerAddress() {
-        return address;
+    private double getDiscountRate() {
+        return isDiscountDay() ? DISCOUNT_RATE : NO_DISCOUNT;
     }
 
     public List<LineItem> getLineItems() {
@@ -33,7 +24,10 @@ public class Order {
     }
 
     public double getTotalAmountIncludeTax() {
-        return getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum() + getTotalSalesTax();
+        return getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum() + getTotalSalesTax() - getTotalDiscountAmount();
+    }
+    public double getTotalDiscountAmount() {
+        return getLineItems().stream().mapToDouble(LineItem::getDiscount).sum();
     }
 
     public double getTotalSalesTax() {
@@ -42,5 +36,9 @@ public class Order {
 
     public LocalDate getCreateDate() {
         return createDate;
+    }
+
+    public boolean isDiscountDay(){
+        return createDate.getDayOfWeek().getValue() == 3;
     }
 }
