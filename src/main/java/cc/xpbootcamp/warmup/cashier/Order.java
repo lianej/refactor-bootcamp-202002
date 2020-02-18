@@ -16,7 +16,7 @@ public class Order {
     }
 
     private double getDiscountRate() {
-        return isDiscountDay() ? DISCOUNT_RATE : NO_DISCOUNT;
+        return isDiscountDayOrder() ? DISCOUNT_RATE : NO_DISCOUNT;
     }
 
     public List<LineItem> getLineItems() {
@@ -43,7 +43,7 @@ public class Order {
         return createDate;
     }
 
-    public boolean isDiscountDay(){
+    private boolean isDiscountDayOrder(){
         return createDate.getDayOfWeek().getValue() == 3;
     }
 }
