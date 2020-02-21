@@ -13,7 +13,7 @@ public class OrderReceipt {
     private static final String TOTAL_AMOUNT_TITLE = "总价:   ";
     private static final String SEPARATION_LINE = "-----------------------------------";
     private static final String PRICE_PATTERN = "#.00";
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy年M月d日，EEEE", Locale.CHINA);
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy年M月d日，EEEE", Locale.CHINA);
 
     private Order order;
 
@@ -65,6 +65,6 @@ public class OrderReceipt {
 
     private String getHeaderPrinting() {
         return PRINTING_TITLE + NEWLINE + NEWLINE +
-                dateTimeFormatter.format(order.getCreateDate()) + NEWLINE + NEWLINE;
+                DATE_TIME_FORMATTER.format(order.getCreateDate()) + NEWLINE + NEWLINE;
     }
 }
