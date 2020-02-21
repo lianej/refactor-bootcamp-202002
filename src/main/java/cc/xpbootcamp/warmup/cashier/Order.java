@@ -6,6 +6,7 @@ import java.util.List;
 public class Order {
     private static final double DISCOUNT_RATE = 0.02d;
     private static final double NO_DISCOUNT = 0d;
+    private static final double TAX_RATE = 0.1d;
     private List<LineItem> lineItems;
     private LocalDate createDate;
 
@@ -35,7 +36,7 @@ public class Order {
     }
 
     public double getTotalSalesTax() {
-        return getLineItems().stream().mapToDouble(LineItem::getSalesTax).sum();
+        return getTotalAmount() * TAX_RATE;
     }
 
     public LocalDate getCreateDate() {
