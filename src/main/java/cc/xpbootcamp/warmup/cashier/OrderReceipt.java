@@ -30,7 +30,7 @@ public class OrderReceipt {
     }
 
     private String getTotalAmountPrinting() {
-        return TOTAL_AMOUNT_TITLE + formatPrice(order.getTotalAmountIncludeTax()) + NEWLINE;
+        return TOTAL_AMOUNT_TITLE + formatPrice(order.getFinalAmount()) + NEWLINE;
     }
 
     private String getDiscountAmountPrinting() {

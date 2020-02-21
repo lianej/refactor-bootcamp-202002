@@ -12,7 +12,6 @@ public class Order {
     public Order(LocalDate createDate, List<LineItem> lineItems) {
         this.createDate = createDate;
         this.lineItems = lineItems;
-        this.lineItems.forEach(item->item.setDiscountRate(getDiscountRate()));
     }
 
     private double getDiscountRate() {
@@ -23,7 +22,7 @@ public class Order {
         return lineItems;
     }
 
-    public double getTotalAmountIncludeTax() {
+    public double getFinalAmount() {
         return getTotalAmount() + getTotalSalesTax() - getTotalDiscountAmount();
     }
 
@@ -32,7 +31,7 @@ public class Order {
     }
 
     public double getTotalDiscountAmount() {
-        return getLineItems().stream().mapToDouble(LineItem::getDiscount).sum();
+        return (getTotalAmount() + getTotalSalesTax()) * getDiscountRate();
     }
 
     public double getTotalSalesTax() {
@@ -43,7 +42,7 @@ public class Order {
         return createDate;
     }
 
-    private boolean isDiscountDayOrder(){
+    private boolean isDiscountDayOrder() {
         return createDate.getDayOfWeek().getValue() == 3;
     }
 }
