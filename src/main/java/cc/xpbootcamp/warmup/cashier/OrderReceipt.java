@@ -54,13 +54,8 @@ public class OrderReceipt {
                 SEPARATION_LINE + NEWLINE;
     }
 
-    private String printItemRow(LineItem lineItem) {
-        String template = "{desc}, {price} x {quantity}, {totalAmount}" + NEWLINE;
-        return template
-                .replace("{desc}", lineItem.getDescription())
-                .replace("{price}", formatPrice(lineItem.getPrice()))
-                .replace("{quantity}", String.valueOf(lineItem.getQuantity()))
-                .replace("{totalAmount}", formatPrice(lineItem.getTotalAmount()));
+    private String printItemRow(LineItem item) {
+        return item.getDescription() + ", " + formatPrice(item.getPrice()) + " x " + item.getQuantity() + ", " + formatPrice(item.getTotalAmount()) + NEWLINE;
     }
 
     private String getHeaderPrinting() {
