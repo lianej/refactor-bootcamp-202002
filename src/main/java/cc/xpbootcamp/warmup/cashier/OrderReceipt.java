@@ -1,5 +1,6 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -34,7 +35,7 @@ public class OrderReceipt {
     }
 
     private String getDiscountAmountPrinting() {
-        if (order.getTotalDiscountAmount() > 0) {
+        if (order.getTotalDiscountAmount().doubleValue() > 0) {
             return DISCOUNT_TITLE + formatPrice(order.getTotalDiscountAmount()) + NEWLINE;
         } else {
             return "";
@@ -45,7 +46,7 @@ public class OrderReceipt {
         return SALES_TAX_TITLE + formatPrice(order.getTotalSalesTax()) + NEWLINE;
     }
 
-    private String formatPrice(double price) {
+    private String formatPrice(BigDecimal price) {
         return new DecimalFormat(PRICE_PATTERN).format(price);
     }
 

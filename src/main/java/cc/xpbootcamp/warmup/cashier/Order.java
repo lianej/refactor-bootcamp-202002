@@ -1,12 +1,14 @@
 package cc.xpbootcamp.warmup.cashier;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
-    private static final double DISCOUNT_RATE = 0.02d;
-    private static final double NO_DISCOUNT = 0d;
-    private static final double TAX_RATE = 0.1d;
+    private static final BigDecimal DISCOUNT_RATE = new BigDecimal("0.02");
+    private static final BigDecimal NO_DISCOUNT = BigDecimal.ZERO;
+    private static final BigDecimal TAX_RATE = new BigDecimal("0.1");
+    private static final int WEDNESDAY = 3;
     private List<LineItem> lineItems;
     private LocalDate createDate;
 
@@ -15,7 +17,7 @@ public class Order {
         this.lineItems = lineItems;
     }
 
-    private double getDiscountRate() {
+    private BigDecimal getDiscountRate() {
         return isDiscountDayOrder() ? DISCOUNT_RATE : NO_DISCOUNT;
     }
 
@@ -23,20 +25,20 @@ public class Order {
         return lineItems;
     }
 
-    public double getFinalAmount() {
-        return getTotalAmount() + getTotalSalesTax() - getTotalDiscountAmount();
+    public BigDecimal getFinalAmount() {
+        return getTotalAmount().add(getTotalSalesTax()).subtract(getTotalDiscountAmount());
     }
 
-    public double getTotalAmount() {
-        return getLineItems().stream().mapToDouble(LineItem::getTotalAmount).sum();
+    public BigDecimal getTotalAmount() {
+        return getLineItems().stream().map(LineItem::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public double getTotalDiscountAmount() {
-        return (getTotalAmount() + getTotalSalesTax()) * getDiscountRate();
+    public BigDecimal getTotalDiscountAmount() {
+        return getTotalAmount().add(getTotalSalesTax()).multiply(getDiscountRate());
     }
 
-    public double getTotalSalesTax() {
-        return getTotalAmount() * TAX_RATE;
+    public BigDecimal getTotalSalesTax() {
+        return getTotalAmount().multiply(TAX_RATE);
     }
 
     public LocalDate getCreateDate() {
@@ -44,6 +46,6 @@ public class Order {
     }
 
     private boolean isDiscountDayOrder() {
-        return createDate.getDayOfWeek().getValue() == 3;
+        return createDate.getDayOfWeek().getValue() == WEDNESDAY;
     }
 }

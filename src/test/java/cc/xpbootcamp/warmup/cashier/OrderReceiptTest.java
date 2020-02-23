@@ -2,6 +2,7 @@ package cc.xpbootcamp.warmup.cashier;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ class OrderReceiptTest {
     @Test
     public void should_print_receipt_given_items_and_date_not_discount_day() {
         List<LineItem> lineItems = new ArrayList<LineItem>() {{
-            add(new LineItem("巧克力", 21.5, 2));
-            add(new LineItem("小白菜", 10, 1));
+            add(new LineItem("巧克力", new BigDecimal("21.5"), 2));
+            add(new LineItem("小白菜", new BigDecimal("10"), 1));
         }};
 
         Order order = new Order(LocalDate.parse("2020-02-17"), lineItems);
@@ -37,8 +38,8 @@ class OrderReceiptTest {
     @Test
     public void should_print_receipt_given_items_and_date_is_wednesday() {
         List<LineItem> lineItems = new ArrayList<LineItem>() {{
-            add(new LineItem("巧克力", 21.5, 2));
-            add(new LineItem("小白菜", 10, 1));
+            add(new LineItem("巧克力", new BigDecimal("21.5"), 2));
+            add(new LineItem("小白菜", new BigDecimal("10"), 1));
         }};
 
         Order order = new Order(LocalDate.parse("2020-02-19"), lineItems);
